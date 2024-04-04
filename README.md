@@ -8,6 +8,7 @@
 - [Dependencies](#dependencies)
   - [Installing torch](#installing-torch)
   - [Installing detectron2](#installing-detectron2)
+- [Getting Started](#getting-started)
 
 ## Dependencies
 - Python >= 3.11
@@ -49,4 +50,30 @@ sudo apt install python3.11-dev
 - Install detectron2 via:
 ```
 python -m pip install git+https://github.com/facebookresearch/detectron2.git
+```
+
+
+## Getting Started
+
+Follow these steps to run the project on your local machine.
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- CUDA drivers (if using GPU acceleration).
+- Other dependencies as listed in the [Dependencies](#dependencies) section.
+
+---
+
+1. Clone the repository to your local machine:
+
+```
+git clone https://github.com/ali6parmak/visual-pdf-segmentation.git
+```
+
+2. Install the required Python packages (If you have already installed the torch, consider commenting it out inside requirements.txt):
+
+```
+pip install -r requirements.txt
 ```
