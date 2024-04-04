@@ -1,0 +1,15 @@
+torch==2.1.1
+torchvision==0.16.1
+timm==0.9.12
+Pillow==10.1.0
+blobfile
+mypy
+numpy
+pytest
+requests
+einops
+tensorboard
+scipy
+opencv-python==4.8.1.78
+Shapely==2.0.2
+transformers
