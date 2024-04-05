@@ -13,3 +13,4 @@ scipy
 opencv-python==4.8.1.78
 Shapely==2.0.2
 transformers
+git+https://github.com/huridocs/pdf-tokens-type-labeler
