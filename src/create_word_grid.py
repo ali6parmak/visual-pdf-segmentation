@@ -6,6 +6,7 @@ from bros import BrosTokenizer
 from pdf_features.PdfToken import PdfToken
 from pdf_features.Rectangle import Rectangle
 from pdf_features.PdfFeatures import PdfFeatures
+from config import WORD_GRIDS_PATH
 
 tokenizer = BrosTokenizer.from_pretrained("naver-clova-ocr/bros-base-uncased")
 
@@ -75,12 +76,12 @@ def get_grid_words_dict(tokens: list[PdfToken]):
 
 
 def create_word_grid(pdf_features: PdfFeatures):
-    makedirs("word_grids", exist_ok=True)
+    makedirs(WORD_GRIDS_PATH, exist_ok=True)
 
     for page in pdf_features.pages:
         image_id = f"{pdf_features.file_name}_{page.page_number - 1}"
-        if exists(join("word_grids", image_id + '.pkl')):
+        if exists(join(WORD_GRIDS_PATH, image_id + '.pkl')):
             continue
         grid_words_dict = get_grid_words_dict(page.tokens)
-        with open(join("word_grids", f'{image_id}.pkl'), mode="wb") as file:
+        with open(join(WORD_GRIDS_PATH, f'{image_id}.pkl'), mode="wb") as file:
             pickle.dump(grid_words_dict, file)
