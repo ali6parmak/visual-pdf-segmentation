@@ -19,19 +19,9 @@ def download_embedding_model():
     model_path = join(MODELS_PATH, "layoutlm-base-uncased")
     if exists(model_path):
         return
+    makedirs(model_path, exist_ok=True)
     print("Embedding model is being downloaded")
-    revision = "95bd33f5b96be185feae70a6a7b8953051deb699"
-    snapshot_download(repo_id="microsoft/layoutlm-base-uncased", revision=revision, cache_dir=MODELS_PATH)
-
-    shutil.rmtree(join(MODELS_PATH, ".locks"))
-    rename(join(MODELS_PATH, "models--microsoft--layoutlm-base-uncased"), model_path)
-
-    revision_path = join(model_path, "snapshots", revision)
-    for file in listdir(revision_path):
-        shutil.move(join(revision_path, file), join(model_path, file))
-
-    shutil.rmtree(join(model_path, "blobs"))
-    shutil.rmtree(join(model_path, "snapshots"))
+    snapshot_download(repo_id="microsoft/layoutlm-base-uncased", local_dir=model_path, local_dir_use_symlinks=False)
 
 
 def download_models():
