@@ -9,6 +9,7 @@
   - [Installing torch](#installing-torch)
   - [Installing detectron2](#installing-detectron2)
 - [Getting Started](#getting-started)
+- [Usage](#usage)
 
 ## Dependencies
 - Python >= 3.11
@@ -76,4 +77,11 @@ git clone https://github.com/ali6parmak/visual-pdf-segmentation.git
 
 ```
 pip install -r requirements.txt
+```
+
+## Usage
+
+Run:
+```
+python src/segment_pdf.py path/to/pdf
 ```
