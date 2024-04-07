@@ -15,3 +15,4 @@ Shapely==2.0.2
 transformers
 pdf2image
 git+https://github.com/huridocs/pdf-tokens-type-labeler
+git+https://github.com/huridocs/pdf_paragraphs_extraction
