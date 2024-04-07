@@ -13,6 +13,7 @@
 
 ## Dependencies
 - Python >= 3.11
+- poppler >= 23.04.0
 - torch >= 2.1.1
 - detectron2
 
