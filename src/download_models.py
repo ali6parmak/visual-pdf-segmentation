@@ -1,9 +1,8 @@
-import shutil
-from os import makedirs, rename, listdir
+from os import makedirs
 from os.path import join, exists
 from urllib.request import urlretrieve
 from huggingface_hub import snapshot_download
-from config import MODELS_PATH
+from path_config import MODELS_PATH
 
 
 def download_vgt_model():

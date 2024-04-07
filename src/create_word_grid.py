@@ -6,7 +6,7 @@ from bros import BrosTokenizer
 from pdf_features.PdfToken import PdfToken
 from pdf_features.Rectangle import Rectangle
 from pdf_features.PdfFeatures import PdfFeatures
-from config import WORD_GRIDS_PATH
+from path_config import WORD_GRIDS_PATH
 
 tokenizer = BrosTokenizer.from_pretrained("naver-clova-ocr/bros-base-uncased")
 
