@@ -78,3 +78,19 @@ REVERSED_CATEGORIES = {
     TokenType.TABLE_OF_CONTENT: 21,
     TokenType.MARK: 11
 }
+
+COLOR_BY_TOKEN_TYPE = {
+    TokenType.FORMULA: "#808000",
+    TokenType.FOOTNOTE: "#7B68EE",
+    TokenType.LIST: "#008B8B",
+    TokenType.TABLE: "#FF8C00",
+    TokenType.FIGURE: "#C71585",
+    TokenType.TITLE: "#FFD700",
+    TokenType.TEXT: "#808080",
+    TokenType.HEADER: "#A2D7E8",
+    TokenType.PAGE_NUMBER: "#E8D3A2",
+    TokenType.IMAGE_CAPTION: "#FC92FC",
+    TokenType.FOOTER: "#988DD9",
+    TokenType.TABLE_OF_CONTENT: "#FFA07A",
+    TokenType.MARK: "#FF7A99"
+}
