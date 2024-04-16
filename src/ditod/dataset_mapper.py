@@ -4,6 +4,7 @@
 
 import copy
 import logging
+from os import path
 
 import numpy as np
 import torch
@@ -128,49 +129,17 @@ class DetrDatasetMapper:
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
         image = utils.read_image(dataset_dict["file_name"], format=self.img_format)
         utils.check_image_size(dataset_dict, image)
-        
-        try:
-            name = dataset_dict["file_name"][0:-4].split('/')
-            if 'publaynet' in name:
-                root = '/'.join(name[:-2])
-                if name[-2] == 'val':
-                    name[-2] = 'dev'
-                pdf_name = '/'.join(['/VGT_publaynet_grid_pkl'] + name[-2:])
-                with open((root + pdf_name + '.pdf.pkl'), "rb") as f:
-                    sample_inputs = pickle.load(f)
-                input_ids = sample_inputs["input_ids"]
-                bbox_subword_list = sample_inputs["bbox_subword_list"]
-            elif 'DocBank' in name:
-                root = '/'.join(name[:-2])
-                pdf_name = '/'.join(['/VGT_docbank_grid_pkl'] + name[-1:])
-                with open((root + pdf_name + '.pkl'), "rb") as f:
-                    sample_inputs = pickle.load(f)
-                input_ids = sample_inputs["input_ids"]
-                bbox_subword_list = sample_inputs["bbox_subword_list"]
-            elif 'D4LA' in name:
-                root = '/'.join(name[:-2])
-                pdf_name = '/'.join(['/word_grids'] + name[-1:])
-                print("ROOT NAME: ", root)
-                print("PDF NAME: ", pdf_name)
-                with open((root + pdf_name + '.pkl'), "rb") as f:
-                    sample_inputs = pickle.load(f)
-                input_ids = sample_inputs["input_ids"]
-                bbox_subword_list = sample_inputs["bbox_subword_list"]
-            elif 'DocLayNet' in name:
-                root = '/'.join(name[:-2])
-                pdf_name = '/'.join(['/VGT_DocLayNet_grid_pkl'] + name[-1:])
-                with open((root + pdf_name + '.pdf.pkl'), "rb") as f:
-                    sample_inputs = pickle.load(f)
-                input_ids = sample_inputs["input_ids"]
-                bbox_subword_list = sample_inputs["bbox_subword_list"]
-            else:
-                input_ids = []
-                bbox_subword_list = []
-                print("no grid pkl")
-        except:
-            print("Wrong bbox file:", dataset_dict["file_name"])
+
+        word_grid_path = dataset_dict["file_name"].replace("images", "word_grids").replace(".jpg", ".pkl")
+        if path.exists(word_grid_path):
+            with open(word_grid_path, "rb") as f:
+                sample_inputs = pickle.load(f)
+            input_ids = sample_inputs["input_ids"]
+            bbox_subword_list = sample_inputs["bbox_subword_list"]
+        else:
             input_ids = []
             bbox_subword_list = []
+            print(f"No word grid pkl in: {word_grid_path}")
 
         image_shape_ori = image.shape[:2]  # h, w
 
