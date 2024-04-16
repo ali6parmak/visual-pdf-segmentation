@@ -33,6 +33,36 @@ CATEGORIES = {
     "PageNumber": 27
 }
 
+CATEGORY_BY_ID = {
+    1: "DocTitle",
+    2: "ParaTitle",
+    3: "ParaText",
+    4: "ListText",
+    5: "RegionTitle",
+    6: "Date",
+    7: "LetterHead",
+    8: "LetterDear",
+    9: "LetterSign",
+    10: "Question",
+    11: "OtherText",
+    12: "RegionKV",
+    13: "RegionList",
+    14: "Abstract",
+    15: "Author",
+    16: "TableName",
+    17: "Table",
+    18: "Figure",
+    19: "FigureName",
+    20: "Equation",
+    21: "Reference",
+    22: "Footer",
+    23: "PageHeader",
+    24: "PageFooter",
+    25: "Number",
+    26: "Catalog",
+    27: "PageNumber"
+}
+
 D4LA_TYPES_TO_TOKEN_TYPES = {
     1: TokenType.TITLE,
     2: TokenType.TITLE,
@@ -93,4 +123,35 @@ COLOR_BY_TOKEN_TYPE = {
     TokenType.FOOTER: "#988DD9",
     TokenType.TABLE_OF_CONTENT: "#FFA07A",
     TokenType.MARK: "#FF7A99"
+}
+
+
+COLOR_BY_CATEGORY = {
+    "DocTitle": "#FFD700",
+    "ParaTitle": "#EED400",
+    "ParaText": "#808080",
+    "ListText": "#008B8B",
+    "RegionTitle": "#DDD100",
+    "Date": "#FFC300",
+    "LetterHead": "#581845",
+    "LetterDear": "#FF5733",
+    "LetterSign": "#FFC300",
+    "Question": "#900C3F",
+    "OtherText": "#A0A0A0",
+    "RegionKV": "#581845",
+    "RegionList": "#449C8B",
+    "Abstract": "#C70039",
+    "Author": "#FFC300",
+    "TableName": "#DD5C00",
+    "Table": "#FF8C00",
+    "Figure": "#C70039",
+    "FigureName": "#FFC300",
+    "Equation": "#581845",
+    "Reference": "#FF5733",
+    "Footer": "#C70039",
+    "PageHeader": "#FF5733",
+    "PageFooter": "#581845",
+    "Number": "#C70039",
+    "Catalog": "#FF5733",
+    "PageNumber": "#E8D3A2"
 }
