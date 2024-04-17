@@ -6,7 +6,7 @@ from pathlib import Path
 from PIL import Image
 from pdf2image import convert_from_path
 from pdf_features.PdfFeatures import PdfFeatures
-from path_config import PROJECT_ROOT_PATH
+from path_config import IMAGES_ROOT_PATH
 
 
 class PdfImages:
@@ -23,10 +23,10 @@ class PdfImages:
             cv2.destroyAllWindows()
 
     def save_images(self):
-        makedirs(join(PROJECT_ROOT_PATH, "images"), exist_ok=True)
+        makedirs(IMAGES_ROOT_PATH, exist_ok=True)
         for image_index, image in enumerate(self.pdf_images):
             image_name = f'{self.pdf_features.file_name}_{image_index}.jpg'
-            image.save(join(PROJECT_ROOT_PATH, "images", image_name))
+            image.save(join(IMAGES_ROOT_PATH, image_name))
 
     @staticmethod
     def from_pdf_path(pdf_path: str):

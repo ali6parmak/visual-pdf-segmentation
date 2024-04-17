@@ -1,11 +1,9 @@
 import json
 from os import makedirs
-from os.path import join
-from pathlib import Path
 from pdf_features.PdfToken import PdfToken
 from PdfImages import PdfImages
 from configuration import REVERSED_CATEGORIES, CATEGORIES
-from path_config import PROJECT_ROOT_PATH
+from path_config import JSONS_ROOT_PATH, JSON_TEST_FILE_PATH
 
 
 def save_annotations_json(annotations: list, width_height: list, images: list):
@@ -20,7 +18,7 @@ def save_annotations_json(annotations: list, width_height: list, images: list):
                  "categories": categories_dict,
                  "annotations": annotations}
 
-    Path(join(PROJECT_ROOT_PATH, "jsons", "test.json")).write_text(json.dumps(coco_dict))
+    JSON_TEST_FILE_PATH.write_text(json.dumps(coco_dict))
 
 
 def get_annotation(index: int, image_id: str, token: PdfToken):
@@ -35,7 +33,7 @@ def get_annotation(index: int, image_id: str, token: PdfToken):
 
 
 def get_annotations(pdf_images_list: list[PdfImages]):
-    makedirs(join(PROJECT_ROOT_PATH, "jsons"), exist_ok=True)
+    makedirs(JSONS_ROOT_PATH, exist_ok=True)
 
     annotations = list()
     images = list()

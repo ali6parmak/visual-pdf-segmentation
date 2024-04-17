@@ -15,7 +15,7 @@ from pdf_token_type_labels.Label import Label
 from pdf_token_type_labels.TokenType import TokenType
 from tqdm import tqdm
 from configuration import PDF_LABELED_DATA_ROOT_PATH, D4LA_TYPES_TO_TOKEN_TYPES
-from path_config import PROJECT_ROOT_PATH
+from path_config import PROJECT_ROOT_PATH, JSON_TEST_FILE_PATH
 
 TRUTH_SEGMENTS_PICKLE_PATH = join(PROJECT_ROOT_PATH, "models", "truth_segments.pickle")
 PREDICTION_SEGMENTS_PICKLE_PATH = join(PROJECT_ROOT_PATH, "models", "prediction_segments.pickle")
@@ -67,7 +67,7 @@ def get_pdf_name_labels(scale: float = 1) -> dict[str, list[Label]]:
     json_path = join(PROJECT_ROOT_PATH, "model_output", "inference", "coco_instances_results.json")
     annotations = json.loads(Path(json_path).read_text())
 
-    json_path = join(PROJECT_ROOT_PATH, "jsons", "test.json")
+    json_path = JSON_TEST_FILE_PATH
     coco_truth = json.loads(Path(json_path).read_text())
 
     images_names = {value["id"]: value["file_name"] for value in coco_truth["images"]}

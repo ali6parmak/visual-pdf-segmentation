@@ -7,7 +7,7 @@ from detectron2.engine import default_argument_parser, default_setup, launch
 from ditod import add_vit_config
 from detectron2.data.datasets import register_coco_instances
 from ditod import VGTTrainer as MyTrainer
-from path_config import PROJECT_ROOT_PATH
+from path_config import PROJECT_ROOT_PATH, IMAGES_ROOT_PATH, JSON_TEST_FILE_PATH
 
 
 def setup(args):
@@ -67,13 +67,11 @@ def prepare_model_path():
 
 
 def register_data():
-    json_file = join(PROJECT_ROOT_PATH, "jsons", "test.json")
-    image_root = join(PROJECT_ROOT_PATH, "images")
     register_coco_instances(
         "predict_data",
         {},
-        json_file,
-        image_root
+        JSON_TEST_FILE_PATH,
+        IMAGES_ROOT_PATH
     )
 
 
