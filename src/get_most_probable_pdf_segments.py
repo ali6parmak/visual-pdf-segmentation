@@ -72,13 +72,14 @@ def get_pdf_segments_for_page(page, pdf_name, page_pdf_name, vgt_predictions_dic
     return most_probable_pdf_segments_for_page
 
 
-def get_most_probable_pdf_segments(pdf_features: PdfFeatures):
+def get_most_probable_pdf_segments(pdf_features_list: list[PdfFeatures]):
     most_probable_pdf_segments: list[PdfSegment] = []
     vgt_predictions_dict = get_vgt_predictions()
-    for page in pdf_features.pages:
-        page_pdf_name = pdf_features.file_name + "_" + str(page.page_number-1)
-        page_segments = get_pdf_segments_for_page(page, pdf_features.file_name, page_pdf_name, vgt_predictions_dict)
-        most_probable_pdf_segments.extend(page_segments)
+    for pdf_features in pdf_features_list:
+        for page in pdf_features.pages:
+            page_pdf_name = pdf_features.file_name + "_" + str(page.page_number-1)
+            page_segments = get_pdf_segments_for_page(page, pdf_features.file_name, page_pdf_name, vgt_predictions_dict)
+            most_probable_pdf_segments.extend(page_segments)
 
     with open(PREDICTION_SEGMENTS_PICKLE_PATH, mode="wb") as file:
         pickle.dump(most_probable_pdf_segments, file)

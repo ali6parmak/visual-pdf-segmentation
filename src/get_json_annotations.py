@@ -35,7 +35,7 @@ def get_annotation(index: int, image_id: str, token: PdfToken):
             'id': index}
 
 
-def get_annotations(pdf_images: PdfImages):
+def get_annotations(pdf_images_list: list[PdfImages]):
     makedirs(join(PROJECT_ROOT_PATH, "jsons"), exist_ok=True)
 
     annotations = list()
@@ -43,15 +43,16 @@ def get_annotations(pdf_images: PdfImages):
     height_width = list()
     index = 0
 
-    for page in pdf_images.pdf_features.pages:
-        image_id = f'{pdf_images.pdf_features.file_name}_{page.page_number - 1}'
-        images.append(image_id)
-        im = Image.open(join(PROJECT_ROOT_PATH, "images", f'{image_id}.jpg'))
-        width, height = im.size
-        height_width.append((width, height))
+    for pdf_images in pdf_images_list:
+        for page in pdf_images.pdf_features.pages:
+            image_id = f'{pdf_images.pdf_features.file_name}_{page.page_number - 1}'
+            images.append(image_id)
+            im = Image.open(join(PROJECT_ROOT_PATH, "images", f'{image_id}.jpg'))
+            width, height = im.size
+            height_width.append((width, height))
 
-        for token in page.tokens:
-            annotations.append(get_annotation(index, image_id, token))
-            index += 1
+            for token in page.tokens:
+                annotations.append(get_annotation(index, image_id, token))
+                index += 1
 
     save_annotations_json(annotations, height_width, images)

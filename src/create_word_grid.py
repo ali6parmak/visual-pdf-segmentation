@@ -75,13 +75,14 @@ def get_grid_words_dict(tokens: list[PdfToken]):
             'bbox_texts_list': np.array(bbox_texts_list)}
 
 
-def create_word_grid(pdf_features: PdfFeatures):
+def create_word_grid(pdf_features_list: list[PdfFeatures]):
     makedirs(WORD_GRIDS_PATH, exist_ok=True)
 
-    for page in pdf_features.pages:
-        image_id = f"{pdf_features.file_name}_{page.page_number - 1}"
-        if exists(join(WORD_GRIDS_PATH, image_id + '.pkl')):
-            continue
-        grid_words_dict = get_grid_words_dict(page.tokens)
-        with open(join(WORD_GRIDS_PATH, f'{image_id}.pkl'), mode="wb") as file:
-            pickle.dump(grid_words_dict, file)
+    for pdf_features in pdf_features_list:
+        for page in pdf_features.pages:
+            image_id = f"{pdf_features.file_name}_{page.page_number - 1}"
+            if exists(join(WORD_GRIDS_PATH, image_id + '.pkl')):
+                continue
+            grid_words_dict = get_grid_words_dict(page.tokens)
+            with open(join(WORD_GRIDS_PATH, f'{image_id}.pkl'), mode="wb") as file:
+                pickle.dump(grid_words_dict, file)
