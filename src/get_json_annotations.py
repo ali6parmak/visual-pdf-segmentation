@@ -2,18 +2,17 @@ import json
 from os import makedirs
 from os.path import join
 from pathlib import Path
-from PIL import Image
 from pdf_features.PdfToken import PdfToken
 from PdfImages import PdfImages
 from configuration import REVERSED_CATEGORIES, CATEGORIES
 from path_config import PROJECT_ROOT_PATH
 
 
-def save_annotations_json(annotations: list, height_width: list, images: list):
+def save_annotations_json(annotations: list, width_height: list, images: list):
     images_dict = [{"id": i,
-                    "file_name": x + '.jpg', 'width': height_width[images.index(x)][0],
-                    'height': height_width[images.index(x)][1]
-                    } for i, x in enumerate(images)]
+                    "file_name": image_id + '.jpg', 'width': width_height[images.index(image_id)][0],
+                    'height': width_height[images.index(image_id)][1]
+                    } for i, image_id in enumerate(images)]
 
     categories_dict = [{"id": value, "name": key} for key, value in CATEGORIES.items()]
 
@@ -40,19 +39,17 @@ def get_annotations(pdf_images_list: list[PdfImages]):
 
     annotations = list()
     images = list()
-    height_width = list()
+    width_height = list()
     index = 0
 
     for pdf_images in pdf_images_list:
-        for page in pdf_images.pdf_features.pages:
+        for page_index, page in enumerate(pdf_images.pdf_features.pages):
             image_id = f'{pdf_images.pdf_features.file_name}_{page.page_number - 1}'
             images.append(image_id)
-            im = Image.open(join(PROJECT_ROOT_PATH, "images", f'{image_id}.jpg'))
-            width, height = im.size
-            height_width.append((width, height))
+            width_height.append((pdf_images.pdf_images[page_index].width, pdf_images.pdf_images[page_index].height))
 
             for token in page.tokens:
                 annotations.append(get_annotation(index, image_id, token))
                 index += 1
 
-    save_annotations_json(annotations, height_width, images)
+    save_annotations_json(annotations, width_height, images)
