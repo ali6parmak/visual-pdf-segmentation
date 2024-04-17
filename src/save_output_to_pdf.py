@@ -3,9 +3,9 @@ from os import makedirs
 from os.path import join
 from paragraph_extraction_trainer.PdfSegment import PdfSegment
 from pdf_annotate import PdfAnnotator, Location, Appearance
-from src.PdfImages import PdfImages
-from src.configuration import CATEGORY_BY_ID, COLOR_BY_CATEGORY
-from src.path_config import PROJECT_ROOT_PATH
+from PdfImages import PdfImages
+from configuration import CATEGORY_BY_ID, COLOR_BY_CATEGORY
+from path_config import PROJECT_ROOT_PATH
 
 
 def hex_color_to_rgb(color: str):

@@ -6,8 +6,8 @@ from paragraph_extraction_trainer.PdfSegment import PdfSegment
 from pdf_features.PdfFeatures import PdfFeatures
 from pdf_features.PdfToken import PdfToken
 from pdf_features.Rectangle import Rectangle
-from src.Prediction import Prediction
-from src.path_config import PROJECT_ROOT_PATH
+from Prediction import Prediction
+from path_config import PROJECT_ROOT_PATH
 
 PREDICTION_SEGMENTS_PICKLE_PATH = join(PROJECT_ROOT_PATH, "model_output", "predicted_segments.pickle")
 
