@@ -36,7 +36,14 @@ def get_predicted_segments() -> list[PdfSegment]:
         return pickle.load(f)
 
 
+def save_output(annotator, pdf_images):
+    output_pdf_path = join(PROJECT_ROOT_PATH, "pdf_outputs", pdf_images.pdf_features.file_name + ".pdf")
+    annotator.write(output_pdf_path)
+
+
 def save_output_to_pdf(pdf_paths: list[str], pdf_images_list: list[PdfImages]):
+    pdf_outputs_path = join(PROJECT_ROOT_PATH, "pdf_outputs")
+    makedirs(pdf_outputs_path, exist_ok=True)
     predicted_segments: list[PdfSegment] = get_predicted_segments()
     for pdf_path, pdf_images in zip(pdf_paths, pdf_images_list):
         annotator = PdfAnnotator(pdf_path)
@@ -44,7 +51,4 @@ def save_output_to_pdf(pdf_paths: list[str], pdf_images_list: list[PdfImages]):
         for predicted_segment in predicted_segments_for_pdf:
             page_height = pdf_images.pdf_features.pages[predicted_segment.page_number-1].page_height
             add_prediction_annotation(annotator, predicted_segment, page_height)
-        pdf_outputs_path = join(PROJECT_ROOT_PATH, "pdf_outputs")
-        makedirs(pdf_outputs_path, exist_ok=True)
-        output_pdf_path = join(PROJECT_ROOT_PATH, "pdf_outputs", pdf_images.pdf_features.file_name + ".pdf")
-        annotator.write(output_pdf_path)
+        save_output(annotator, pdf_images)
