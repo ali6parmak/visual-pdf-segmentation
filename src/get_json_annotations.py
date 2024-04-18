@@ -32,6 +32,17 @@ def get_annotation(index: int, image_id: str, token: PdfToken):
             'id': index}
 
 
+def get_annotations_for_document(annotations, images, index, pdf_images, width_height):
+    for page_index, page in enumerate(pdf_images.pdf_features.pages):
+        image_id = f'{pdf_images.pdf_features.file_name}_{page.page_number - 1}'
+        images.append(image_id)
+        width_height.append((pdf_images.pdf_images[page_index].width, pdf_images.pdf_images[page_index].height))
+
+        for token in page.tokens:
+            annotations.append(get_annotation(index, image_id, token))
+            index += 1
+
+
 def get_annotations(pdf_images_list: list[PdfImages]):
     makedirs(JSONS_ROOT_PATH, exist_ok=True)
 
@@ -41,13 +52,7 @@ def get_annotations(pdf_images_list: list[PdfImages]):
     index = 0
 
     for pdf_images in pdf_images_list:
-        for page_index, page in enumerate(pdf_images.pdf_features.pages):
-            image_id = f'{pdf_images.pdf_features.file_name}_{page.page_number - 1}'
-            images.append(image_id)
-            width_height.append((pdf_images.pdf_images[page_index].width, pdf_images.pdf_images[page_index].height))
-
-            for token in page.tokens:
-                annotations.append(get_annotation(index, image_id, token))
-                index += 1
+        get_annotations_for_document(annotations, images, index, pdf_images, width_height)
+        index += sum([len(page.tokens) for page in pdf_images.pdf_features.pages])
 
     save_annotations_json(annotations, width_height, images)
