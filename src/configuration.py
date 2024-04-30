@@ -155,3 +155,82 @@ COLOR_BY_CATEGORY = {
     "Catalog": "#FF5733",
     "PageNumber": "#E8D3A2"
 }
+
+
+PUBLAYNET_TYPE_BY_ID = {
+    1: "Text",
+    2: "Title",
+    3: "Table",
+    4: "Figure",
+    5: "List"
+}
+
+
+PUBLAYNET_COLOR_BY_TYPE = {
+    "Text": "#A0A0A0",
+    "Title": "#EED400",
+    "Table": "#FF8C00",
+    "Figure": "#C70039",
+    "List": "#008B8B",
+}
+
+
+DOCLAYNET_TYPE_BY_ID = {
+    1: "Caption",
+    2: "Footnote",
+    3: "Formula",
+    4: "ListItem",
+    5: "PageFooter",
+    6: "PageHeader",
+    7: "Picture",
+    8: "SectionHeader",
+    9: "Table",
+    10: "Text",
+    11: "Title"
+}
+
+DOCLAYNET_COLOR_BY_TYPE = {
+    "Caption": "#FFC300",
+    "Footnote": "#581845",
+    "Formula": "#FF5733",
+    "ListItem": "#008B8B",
+    "PageFooter": "#FF5733",
+    "PageHeader": "#581845",
+    "Picture": "#C70039",
+    "SectionHeader": "#C70039",
+    "Table": "#FF8C00",
+    "Text": "#A0A0A0",
+    "Title": "#EED400"
+}
+
+
+DOCBANK_TYPE_BY_ID = {
+    1: "Abstract",
+    2: "Author",
+    3: "Caption",
+    4: "Equation",
+    5: "Figure",
+    6: "Footer",
+    7: "List",
+    8: "Paragraph",
+    9: "Reference",
+    10: "Section",
+    11: "Table",
+    12: "Title"
+}
+
+
+DOCBANK_COLOR_BY_TYPE = {
+    "Abstract": "#C70039",
+    "Author": "#FFC300",
+    "Caption": "#FFC300",
+    "Equation": "#FF5733",
+    "Figure": "#C70039",
+    "Footer": "#581845",
+    "List": "#008B8B",
+    "Paragraph": "#A0A0A0",
+    "Reference": "#FF5733",
+    "Section": "#581845",
+    "Table": "#FF8C00",
+    "Title": "#EED400"
+}
