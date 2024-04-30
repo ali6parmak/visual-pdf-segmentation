@@ -8,8 +8,7 @@ from pdf_features.PdfToken import PdfToken
 from pdf_features.Rectangle import Rectangle
 from Prediction import Prediction
 from path_config import PROJECT_ROOT_PATH
-
-PREDICTION_SEGMENTS_PICKLE_PATH = join(PROJECT_ROOT_PATH, "model_output", "predicted_segments.pickle")
+from PdfImages import PdfImages
 
 
 def get_prediction_from_annotation(annotation, images_names, vgt_predictions_dict):
@@ -25,8 +24,9 @@ def get_prediction_from_annotation(annotation, images_names, vgt_predictions_dic
     vgt_predictions_dict.setdefault(pdf_name, list()).append(prediction)
 
 
-def get_vgt_predictions() -> dict[str, list[Prediction]]:
-    model_output_json_path = join(str(PROJECT_ROOT_PATH), "model_output", "inference", "coco_instances_results.json")
+def get_vgt_predictions(model_name: str) -> dict[str, list[Prediction]]:
+    output_dir: str = f"model_output_{model_name}"
+    model_output_json_path = join(str(PROJECT_ROOT_PATH), output_dir, "inference", "coco_instances_results.json")
     annotations = json.loads(Path(model_output_json_path).read_text())
 
     test_json_path = join(str(PROJECT_ROOT_PATH), "jsons", "test.json")
@@ -54,7 +54,7 @@ def find_best_prediction_for_token(page_pdf_name, token, vgt_predictions_dict, m
     if most_probable_prediction:
         most_probable_tokens_by_predictions.setdefault(most_probable_prediction, list()).append(token)
     else:
-        dummy_prediction = Prediction(bounding_box=token.bounding_box, category_id=11, score=0.0)
+        dummy_prediction = Prediction(bounding_box=token.bounding_box, category_id=1, score=0.0)
         most_probable_tokens_by_predictions.setdefault(dummy_prediction, list()).append(token)
 
 
@@ -72,14 +72,17 @@ def get_pdf_segments_for_page(page, pdf_name, page_pdf_name, vgt_predictions_dic
     return most_probable_pdf_segments_for_page
 
 
-def get_most_probable_pdf_segments(pdf_features_list: list[PdfFeatures]):
+def get_most_probable_pdf_segments(model_name: str, pdf_images_list: list[PdfImages], save_output: bool = False):
     most_probable_pdf_segments: list[PdfSegment] = []
-    vgt_predictions_dict = get_vgt_predictions()
+    vgt_predictions_dict = get_vgt_predictions(model_name)
+    pdf_features_list: list[PdfFeatures] = [pdf_images.pdf_features for pdf_images in pdf_images_list]
     for pdf_features in pdf_features_list:
         for page in pdf_features.pages:
             page_pdf_name = pdf_features.file_name + "_" + str(page.page_number-1)
             page_segments = get_pdf_segments_for_page(page, pdf_features.file_name, page_pdf_name, vgt_predictions_dict)
             most_probable_pdf_segments.extend(page_segments)
-
-    with open(PREDICTION_SEGMENTS_PICKLE_PATH, mode="wb") as file:
-        pickle.dump(most_probable_pdf_segments, file)
+    if save_output:
+        save_path = join(PROJECT_ROOT_PATH, f"model_output_{model_name}", "predicted_segments.pickle")
+        with open(save_path, mode="wb") as file:
+            pickle.dump(most_probable_pdf_segments, file)
+    return most_probable_pdf_segments

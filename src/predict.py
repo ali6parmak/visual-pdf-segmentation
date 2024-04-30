@@ -41,28 +41,28 @@ def main(args):
     return trainer.train()
 
 
-def get_args():
+def get_args(model_name: str):
     parser = default_argument_parser()
     parser.add_argument("--debug", action="store_true", help="enable debug mode")
     args = parser.parse_args()
-    args.config_file = join(PROJECT_ROOT_PATH, "src", "model_configuration", "VGT_cascade_PTM.yaml")
+    args.config_file = join(PROJECT_ROOT_PATH, "src", "model_configuration", f"{model_name}_VGT_cascade_PTM.yaml")
     args.eval_only = True
     args.num_gpus = 1
-    args.opts = ['MODEL.WEIGHTS', join(PROJECT_ROOT_PATH, 'models', 'D4LA_VGT_model.pth'),
-                 'OUTPUT_DIR', join(PROJECT_ROOT_PATH, 'model_output')]
+    args.opts = ['MODEL.WEIGHTS', join(PROJECT_ROOT_PATH, 'models', f'{model_name}_VGT_model.pth'),
+                 'OUTPUT_DIR', join(PROJECT_ROOT_PATH, f'model_output_{model_name}')]
     args.debug = False
     return args
 
 
-def prepare_model_path():
-    os.makedirs(join(PROJECT_ROOT_PATH, "model_output"), exist_ok=True)
-    with open(join(PROJECT_ROOT_PATH, "src", "model_configuration", "VGT_cascade_PTM.yaml"), "r") as file:
+def prepare_model_path(model_name: str):
+    os.makedirs(join(PROJECT_ROOT_PATH, f"model_output_{model_name}"), exist_ok=True)
+    with open(join(PROJECT_ROOT_PATH, "src", "model_configuration", f"{model_name}_VGT_cascade_PTM.yaml"), "r") as file:
         yaml_content = yaml.safe_load(file)
 
     embedding_model_path = join(PROJECT_ROOT_PATH, "models", "layoutlm-base-uncased") + '/'
     yaml_content["MODEL"]["WORDGRID"]["MODEL_PATH"] = embedding_model_path
 
-    with open(join(PROJECT_ROOT_PATH, "src", "model_configuration", "VGT_cascade_PTM.yaml"), "w") as file:
+    with open(join(PROJECT_ROOT_PATH, "src", "model_configuration", f"{model_name}_VGT_cascade_PTM.yaml"), "w") as file:
         yaml.dump(yaml_content, file)
 
 
@@ -75,9 +75,9 @@ def register_data():
     )
 
 
-def predict():
-    prepare_model_path()
-    args = get_args()
+def predict(model_name: str):
+    prepare_model_path(model_name)
+    args = get_args(model_name)
     register_data()
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"
@@ -90,7 +90,3 @@ def predict():
         dist_url=args.dist_url,
         args=(args,),
     )
-
-
-if __name__ == '__main__':
-    predict()
