@@ -84,5 +84,5 @@ pip install -r requirements.txt
 
 Run:
 ```
-python src/segment_pdf.py path/to/pdf
+python src/segment_pdf.py path/to/pdf.pdf path/to/pdf2.pdf path/to/pdf3.pdf
 ```
