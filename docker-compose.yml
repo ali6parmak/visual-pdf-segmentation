@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  pdf_extractor:
+    container_name: pdf_extractor
+    entrypoint: [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--chdir", "./src", "app:app", "--bind", "0.0.0.0:5059", "--timeout", "300"]
+    init: true
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5051:5051"
