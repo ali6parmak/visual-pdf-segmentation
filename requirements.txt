@@ -2,6 +2,7 @@ torch==2.1.1
 torchvision==0.16.1
 timm==0.9.12
 Pillow==10.1.0
+pdf-annotate==0.12.0
 blobfile
 mypy
 numpy
