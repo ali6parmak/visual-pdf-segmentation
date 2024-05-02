@@ -86,3 +86,23 @@ Run:
 ```
 python src/segment_pdf.py path/to/pdf.pdf path/to/pdf2.pdf path/to/pdf3.pdf
 ```
+
+
+## How to use GPU
+
+To use the GPU in the docker containers
+
+1. Install the package:
+        
+    nvidia-container-toolkit
+
+
+2. Restart docker service
+
+    systemctl restart docker
+
+
+
+3. Start the service with
+    
+    make start_gpu

@@ -5,7 +5,7 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update
 RUN apt-get install -y python3.10-dev
-RUN apt-get install -y -q --no-install-recommends libgomp1 pdftohtml git wget sudo ninja-build
+RUN apt-get install -y -q --no-install-recommends libgomp1 pdftohtml git
 
 RUN apt-get install -y python3-pybind11
 RUN apt-get install -y g++
@@ -28,8 +28,6 @@ RUN pip --default-timeout=1000 install -r requirements.txt
 
 WORKDIR /app
 RUN git clone https://github.com/facebookresearch/detectron2
-RUN pip install torch==2.3.0
-RUN pip install torchvision==0.18.0
 RUN cd detectron2 && python setup.py build develop
 
 COPY ./src ./src
@@ -38,4 +36,6 @@ ENV PYTHONPATH "${PYTHONPATH}:/app/src"
 ENV TRANSFORMERS_VERBOSITY=error
 ENV TRANSFORMERS_NO_ADVISORY_WARNINGS=1
 ENV CUDA_VISIBLE_DEVICES=0
+
+RUN python -c "import torch; print('Is PyTorch using GPU:', torch.cuda.is_available())"
 
