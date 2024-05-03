@@ -22,6 +22,7 @@ remove_docker_images:
 	docker compose config --images | xargs docker rmi
 
 start:
+	mkdir -p ./models
 	docker compose up --build
 
 stop:

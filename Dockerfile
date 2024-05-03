@@ -26,8 +26,6 @@ COPY ./src ./src
 COPY ./models/. ./models/
 RUN python src/download_models.py
 
-RUN #chown -R python:python /app/src/model_configuration/Base-RCNN-FPN.yaml
-
 ENV PYTHONPATH "${PYTHONPATH}:/app/src"
 ENV TRANSFORMERS_VERBOSITY=error
 ENV TRANSFORMERS_NO_ADVISORY_WARNINGS=1
