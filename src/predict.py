@@ -40,24 +40,6 @@ def get_args(model_name: str):
     return args
 
 
-doclaynet_args = get_args("doclaynet")
-configuration = setup(doclaynet_args)
-doclaynet_model = MyTrainer.build_model(configuration)
-DetectionCheckpointer(doclaynet_model, save_dir=configuration.OUTPUT_DIR).resume_or_load(configuration.MODEL.WEIGHTS, resume=False)
-
-
-def main(args):
-    if 'sdfsdfsdfdoclaynet' in args.opts[1]:
-        model = doclaynet_model
-    else:
-        model = MyTrainer.build_model(configuration)
-        DetectionCheckpointer(model, save_dir=configuration.OUTPUT_DIR).resume_or_load(
-            configuration.MODEL.WEIGHTS, resume=args.resume
-        )
-    res = MyTrainer.test(configuration, model)
-    return res
-
-
 def prepare_model_path(model_name: str):
     os.makedirs(join(PROJECT_ROOT_PATH, f"model_output_{model_name}"), exist_ok=True)
     with open(join(PROJECT_ROOT_PATH, "src", "model_configuration", f"{model_name}_VGT_cascade_PTM.yaml"), "r") as file:
@@ -80,15 +62,13 @@ def register_data():
 
 
 def predict(model_name: str):
+    args = get_args(model_name)
     register_data()
+
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"
 
-    launch(
-        main,
-        doclaynet_args.num_gpus,
-        num_machines=doclaynet_args.num_machines,
-        machine_rank=doclaynet_args.machine_rank,
-        dist_url=doclaynet_args.dist_url,
-        args=(doclaynet_args,),
-    )
+    configuration = setup(args)
+    doclaynet_model = MyTrainer.build_model(configuration)
+    DetectionCheckpointer(doclaynet_model, save_dir=configuration.OUTPUT_DIR).resume_or_load(configuration.MODEL.WEIGHTS, resume=True)
+    MyTrainer.test(configuration, doclaynet_model)
