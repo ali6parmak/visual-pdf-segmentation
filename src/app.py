@@ -10,6 +10,10 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 
 from configuration import service_logger
 from src.segment_pdf import get_segmentation
+import logging
+
+logger = logging.getLogger("d2")
+logger.setLevel(logging.CRITICAL)
 
 app = FastAPI()
 

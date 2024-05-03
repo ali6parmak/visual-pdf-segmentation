@@ -28,21 +28,6 @@ def setup(args):
     return cfg
 
 
-def main(args):
-    cfg = setup(args)
-    if args.eval_only:
-        model = MyTrainer.build_model(cfg)
-        DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
-            cfg.MODEL.WEIGHTS, resume=args.resume
-        )
-        res = MyTrainer.test(cfg, model)
-        return res
-
-    trainer = MyTrainer(cfg)
-    trainer.resume_or_load(resume=args.resume)
-    return trainer.train()
-
-
 def get_args(model_name: str):
     parser = default_argument_parser()
     args, unknown = parser.parse_known_args()
@@ -53,6 +38,24 @@ def get_args(model_name: str):
                  'OUTPUT_DIR', join(PROJECT_ROOT_PATH, f'model_output_{model_name}')]
     args.debug = False
     return args
+
+
+doclaynet_args = get_args("doclaynet")
+configuration = setup(doclaynet_args)
+doclaynet_model = MyTrainer.build_model(configuration)
+DetectionCheckpointer(doclaynet_model, save_dir=configuration.OUTPUT_DIR).resume_or_load(configuration.MODEL.WEIGHTS, resume=False)
+
+
+def main(args):
+    if 'sdfsdfsdfdoclaynet' in args.opts[1]:
+        model = doclaynet_model
+    else:
+        model = MyTrainer.build_model(configuration)
+        DetectionCheckpointer(model, save_dir=configuration.OUTPUT_DIR).resume_or_load(
+            configuration.MODEL.WEIGHTS, resume=args.resume
+        )
+    res = MyTrainer.test(configuration, model)
+    return res
 
 
 def prepare_model_path(model_name: str):
@@ -77,17 +80,15 @@ def register_data():
 
 
 def predict(model_name: str):
-    # prepare_model_path(model_name)
-    args = get_args(model_name)
     register_data()
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"
 
     launch(
         main,
-        args.num_gpus,
-        num_machines=args.num_machines,
-        machine_rank=args.machine_rank,
-        dist_url=args.dist_url,
-        args=(args,),
+        doclaynet_args.num_gpus,
+        num_machines=doclaynet_args.num_machines,
+        machine_rank=doclaynet_args.machine_rank,
+        dist_url=doclaynet_args.dist_url,
+        args=(doclaynet_args,),
     )

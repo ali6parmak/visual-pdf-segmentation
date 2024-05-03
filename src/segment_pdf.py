@@ -2,12 +2,10 @@ import argparse
 from PdfImages import PdfImages
 from configuration import service_logger
 from data_model.SegmentBox import SegmentBox
-from download_models import download_models
 from create_word_grid import create_word_grid
 from get_json_annotations import get_annotations
 from predict import predict
 from get_most_probable_pdf_segments import get_most_probable_pdf_segments
-from save_output_to_pdf import save_output_to_pdf
 
 
 def get_segmentation(model_name: str, pdf_paths: list[str]):
@@ -18,7 +16,6 @@ def get_segmentation(model_name: str, pdf_paths: list[str]):
     predict(model_name)
 
     predicted_segments = get_most_probable_pdf_segments(model_name, pdf_images_list, False)
-    # save_output_to_pdf(model_name, pdf_paths, pdf_images_list, predicted_segments)
     return [SegmentBox.from_pdf_segment(pdf_segment).to_dict() for pdf_segment in predicted_segments]
 
 
