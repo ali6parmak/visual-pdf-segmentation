@@ -1,4 +1,8 @@
-import argparse
+import pickle
+import tempfile
+import uuid
+from pathlib import Path
+from time import time
 
 import yaml
 import os
@@ -6,10 +10,19 @@ from os.path import join
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.config import get_cfg
 from detectron2.engine import default_argument_parser, default_setup, launch
+
+from configuration import service_logger
 from ditod import add_vit_config
 from detectron2.data.datasets import register_coco_instances
+from detectron2.data import DatasetCatalog
 from ditod import VGTTrainer as MyTrainer
 from path_config import PROJECT_ROOT_PATH, IMAGES_ROOT_PATH, JSON_TEST_FILE_PATH
+
+with open("model_configuration/doclaynet_configuration.pickle", mode="rb") as file:
+    configuration = pickle.load(file)
+
+model = MyTrainer.build_model(configuration)
+DetectionCheckpointer(model, save_dir=configuration.OUTPUT_DIR).resume_or_load(configuration.MODEL.WEIGHTS, resume=True)
 
 
 def setup(args):
@@ -52,18 +65,15 @@ def prepare_model_path(model_name: str):
         yaml.dump(yaml_content, file)
 
 
-def register_data():
+def predict(model_name: str):
+    args = get_args(model_name)
+
     register_coco_instances(
         "predict_data",
         {},
         JSON_TEST_FILE_PATH,
         IMAGES_ROOT_PATH
     )
-
-
-def predict(model_name: str):
-    args = get_args(model_name)
-    register_data()
 
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"
@@ -72,3 +82,38 @@ def predict(model_name: str):
     doclaynet_model = MyTrainer.build_model(configuration)
     DetectionCheckpointer(doclaynet_model, save_dir=configuration.OUTPUT_DIR).resume_or_load(configuration.MODEL.WEIGHTS, resume=True)
     MyTrainer.test(configuration, doclaynet_model)
+    DatasetCatalog.remove("predict_data")
+
+
+def predict_doclaynet():
+    register_data()
+    MyTrainer.test(configuration, model)
+
+
+def register_data():
+    try:
+        DatasetCatalog.remove("predict_data")
+    except KeyError:
+        pass
+
+    register_coco_instances(
+        "predict_data",
+        {},
+        JSON_TEST_FILE_PATH,
+        IMAGES_ROOT_PATH
+    )
+
+
+def get_file_path(file_name, extension):
+    return join(tempfile.gettempdir(), file_name + "." + extension)
+
+
+def pdf_content_to_pdf_path(file_content):
+    file_id = str(uuid.uuid1())
+
+    pdf_path = Path(get_file_path(file_id, "pdf"))
+    pdf_path.write_bytes(file_content)
+
+    return pdf_path
+
+

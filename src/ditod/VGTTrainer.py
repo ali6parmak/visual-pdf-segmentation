@@ -15,6 +15,7 @@ import os
 import sys
 import weakref
 from collections import OrderedDict
+from time import time
 from typing import Optional
 import torch
 from fvcore.nn.precise_bn import get_bn_modules
@@ -48,6 +49,7 @@ from detectron2.utils.logger import setup_logger
 from detectron2.engine import hooks
 from detectron2.engine.train_loop import AMPTrainer, SimpleTrainer, TrainerBase
 
+from configuration import service_logger
 from .VGTcheckpointer import MyDetectionCheckpointer
 from typing import Any, Dict, List, Set
 import itertools
