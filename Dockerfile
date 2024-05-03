@@ -1,17 +1,10 @@
 FROM pytorch/pytorch:2.3.0-cuda11.8-cudnn8-runtime
 
 RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get update
-RUN apt-get install -y python3.10-dev
-RUN apt-get install -y -q --no-install-recommends libgomp1 pdftohtml git
-
-RUN apt-get install -y python3-pybind11
-RUN apt-get install -y g++
-RUN apt-get install -y ffmpeg libsm6 libxext6
+RUN apt-get install -y -q --no-install-recommends libgomp1 ffmpeg libsm6 libxext6 pdftohtml git ninja-build g++
 
 RUN mkdir -p /app/src
+RUN mkdir -p /app/models
 
 RUN addgroup --system python && adduser --system --group python
 RUN chown -R python:python /app
@@ -25,17 +18,17 @@ COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip
 RUN pip --default-timeout=1000 install -r requirements.txt
 
-
 WORKDIR /app
 RUN git clone https://github.com/facebookresearch/detectron2
 RUN cd detectron2 && python setup.py build develop
 
 COPY ./src ./src
+COPY ./models/. ./models/
+RUN python src/download_models.py
+
+RUN #chown -R python:python /app/src/model_configuration/Base-RCNN-FPN.yaml
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/src"
 ENV TRANSFORMERS_VERBOSITY=error
 ENV TRANSFORMERS_NO_ADVISORY_WARNINGS=1
-ENV CUDA_VISIBLE_DEVICES=0
-
-RUN python -c "import torch; print('Is PyTorch using GPU:', torch.cuda.is_available())"
 

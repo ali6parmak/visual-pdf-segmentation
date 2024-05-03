@@ -1,7 +1,19 @@
+import logging
+from os.path import join
+from pathlib import Path
+
 from pdf_token_type_labels.TokenType import TokenType
 
-PDF_LABELED_DATA_ROOT_PATH = "/home/ali/Desktop/pdf-labeled-data"
-pdfs_root_path = "/home/ali/Desktop/pdf-labeled-data/pdfs"
+APP_PATH = Path(__file__).parent.absolute()
+ROOT_PATH = Path(__file__).parent.parent.absolute()
+
+handlers = [logging.StreamHandler()]
+logging.root.handlers = []
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s", handlers=handlers)
+service_logger = logging.getLogger(__name__)
+
+PDF_LABELED_DATA_ROOT_PATH = join(ROOT_PATH.parent, "pdf-labeled-data")
+pdfs_root_path = join(PDF_LABELED_DATA_ROOT_PATH, "pdfs")
 
 CATEGORIES = {
     "DocTitle": 1,

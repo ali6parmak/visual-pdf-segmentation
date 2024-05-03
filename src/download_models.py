@@ -1,17 +1,28 @@
+import math
 from os import makedirs
 from os.path import join, exists
 from urllib.request import urlretrieve
 from huggingface_hub import snapshot_download
+
+from configuration import service_logger
 from path_config import MODELS_PATH
 
 
+def download_progress(count, block_size, total_size):
+    total_counts = total_size // block_size
+    show_counts_percentages = total_counts // 5
+    percent = count * block_size * 100 / total_size
+    if count % show_counts_percentages == 0:
+        service_logger.info(f"Downloaded {math.ceil(percent)}%")
+
+
 def download_vgt_model(model_name: str):
+    service_logger.info(f"Downloading {model_name} model")
     model_path = join(MODELS_PATH, f"{model_name}_VGT_model.pth")
     if exists(model_path):
         return
     download_link = f"https://github.com/AlibabaResearch/AdvancedLiterateMachinery/releases/download/v1.3.0-VGT-release/{model_name}_VGT_model.pth"
-    print(f"VGT model [{model_name}] is being downloaded")
-    urlretrieve(download_link, model_path)
+    urlretrieve(download_link, model_path, reporthook=download_progress)
 
 
 def download_embedding_model():
@@ -27,3 +38,7 @@ def download_models(model_name: str):
     makedirs(MODELS_PATH, exist_ok=True)
     download_vgt_model(model_name)
     download_embedding_model()
+
+
+if __name__ == '__main__':
+    download_models("doclaynet")

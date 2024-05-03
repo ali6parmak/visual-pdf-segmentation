@@ -1,5 +1,6 @@
 import argparse
 from PdfImages import PdfImages
+from configuration import service_logger
 from data_model.SegmentBox import SegmentBox
 from download_models import download_models
 from create_word_grid import create_word_grid
@@ -10,7 +11,7 @@ from save_output_to_pdf import save_output_to_pdf
 
 
 def get_segmentation(model_name: str, pdf_paths: list[str]):
-    download_models(model_name)
+    service_logger.info(f'Creating PDF images')
     pdf_images_list: list[PdfImages] = [PdfImages.from_pdf_path(pdf_path) for pdf_path in pdf_paths]
     create_word_grid([pdf_images.pdf_features for pdf_images in pdf_images_list])
     get_annotations(pdf_images_list)
@@ -19,6 +20,7 @@ def get_segmentation(model_name: str, pdf_paths: list[str]):
     predicted_segments = get_most_probable_pdf_segments(model_name, pdf_images_list, False)
     # save_output_to_pdf(model_name, pdf_paths, pdf_images_list, predicted_segments)
     return [SegmentBox.from_pdf_segment(pdf_segment).to_dict() for pdf_segment in predicted_segments]
+
 
 def get_args():
     parser = argparse.ArgumentParser(description="Process PDF segmentation")

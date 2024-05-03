@@ -1,3 +1,5 @@
+import argparse
+
 import yaml
 import os
 from os.path import join
@@ -43,8 +45,7 @@ def main(args):
 
 def get_args(model_name: str):
     parser = default_argument_parser()
-    parser.add_argument("--debug", action="store_true", help="enable debug mode")
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
     args.config_file = join(PROJECT_ROOT_PATH, "src", "model_configuration", f"{model_name}_VGT_cascade_PTM.yaml")
     args.eval_only = True
     args.num_gpus = 1
@@ -76,7 +77,7 @@ def register_data():
 
 
 def predict(model_name: str):
-    prepare_model_path(model_name)
+    # prepare_model_path(model_name)
     args = get_args(model_name)
     register_data()
     os.environ["TOKENIZERS_PARALLELISM"] = "false"

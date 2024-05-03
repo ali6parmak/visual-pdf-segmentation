@@ -27,7 +27,7 @@ MODEL:
   WEIGHTS: https://layoutlm.blob.core.windows.net/dit/dit-pts/dit-base-224-p16-500k-62d53a.pth
   WORDGRID:
     EMBEDDING_DIM: 64
-    MODEL_PATH: /home/ali/Desktop/visual-pdf-segmentation/models/layoutlm-base-uncased/
+    MODEL_PATH: ../models/layoutlm-base-uncased/
     USE_PRETRAIN_WEIGHT: true
     VOCAB_SIZE: 30552
 SOLVER:
@@ -38,4 +38,4 @@ SOLVER:
   WARMUP_ITERS: 100
 TEST:
   EVAL_PERIOD: 2000
-_BASE_: ~/Desktop/visual-pdf-segmentation/src/model_configuration/Base-RCNN-FPN.yaml
+_BASE_: ./Base-RCNN-FPN.yaml
