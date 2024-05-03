@@ -1,4 +1,6 @@
 import pickle
+import shutil
+
 import numpy as np
 from os import makedirs
 from os.path import join, exists
@@ -86,3 +88,7 @@ def create_word_grid(pdf_features_list: list[PdfFeatures]):
             grid_words_dict = get_grid_words_dict(page.tokens)
             with open(join(WORD_GRIDS_PATH, f'{image_id}.pkl'), mode="wb") as file:
                 pickle.dump(grid_words_dict, file)
+
+
+def remove_word_grids():
+    shutil.rmtree(WORD_GRIDS_PATH, ignore_errors=True)

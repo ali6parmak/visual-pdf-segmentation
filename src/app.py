@@ -16,8 +16,8 @@ async def info():
     return sys.version
 
 
-@app.post("/get_paragraphs")
-async def get_paragraphs(file: UploadFile = File(...)):
+@app.post("/analyze_pdf")
+async def analyze_pdf(file: UploadFile = File(...)):
     try:
         service_logger.info(f"Processing file: {file.filename}")
         return get_segmentation_doclaynet(file.file.read())
